@@ -9,15 +9,21 @@
     <link rel="stylesheet" href="./css/master.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-2 col-md-offset-5">
                 <h3>Login to Chat</h3>
                 <br/>
                 <form action="">
-                    <label for="">
-                        <input type="text" class="form-control" name="email" placeholder="Enter your email...">
-                    </label>
+                    <label for="">Email</label>
+                    <input type="text" class="form-control" name="email" placeholder="Enter your email...">
+                    <label for="">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Enter your password...">
+                    <div>
+                        <a href="#">Don't have an account? Create one here.</a>
+                    </div>
+                    <br/>
+                    <input type="submit" class="btn btn-primary">
                 </form>
             </div>
         </div>
