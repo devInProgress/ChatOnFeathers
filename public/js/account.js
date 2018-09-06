@@ -16,6 +16,7 @@ $(document).ready(() => {
     // obtain users service
     const usersService = client.service('/users');
 
+
     // Get user credentials
 
     const getCredentials = () => {
@@ -28,9 +29,19 @@ $(document).ready(() => {
 
     // Handle form submittal
 
-    $('new-user-form').submit((e) => {
+    $('#new-user-form').submit(async (e) => {
         e.preventDefault();
         const userCredentials = getCredentials();
-        console.log()
+        // create a new user using the feathers client
+        try {
+            const userServiceResponse = await usersService.create(userCredentials);
+            console.log(userServiceResponse);
+            window.location.href = `${serverUrl}/login.html`;
+        }
+        catch(error) {
+            $('#error-message')
+                .text(`Error occurred! ${error.message}.`)
+                .show();
+        }
     });
 });
