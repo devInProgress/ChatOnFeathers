@@ -18,11 +18,11 @@
                 <h3>Create New Account</h3>
                 <br/>
 
-                <form>
+                <form id="new-user-form">
                     <label>Email</label>
-                    <input type="text" class="form-control" name="email" placeholder="Enter your email...">
+                    <input id="email" type="text" class="form-control" name="email" placeholder="Enter your email...">
                     <label>Password</label>
-                    <input type="text" class="form-control" placeholder="Enter your password...">
+                    <input id="password" type="text" class="form-control" placeholder="Enter your password...">
                     <div>
                         <a href="#">Already have an account? Login here.</a>
                     </div>
@@ -37,8 +37,15 @@
         </div>
     </div>
 
+    <!-- jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <!-- feathers -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js"></script>
     <script src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
     <script src="//unpkg.com/socket.io-client@1.7.3/dist/socket.io.js"></script>
+
+    <!-- custom scripts -->
+    <script src="./js/account.js"></script>
 </body>
 </html>
