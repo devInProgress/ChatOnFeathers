@@ -17,24 +17,22 @@ $(document).ready(() => {
 		const usersService = client.service('/users');
 		const messagesService = client.service('/messages');
 
-		const getMessages = async () => {
-			const messages = await messagesService.find({
+		const populateMessagesOnAppLoad = async () => {
+			let htmlString = ``;
+			const response = await messagesService.find({
 				query: {
 					$sort: {
-						createdAt: -1
+						createdAt: 1
 					}
 				}
 			});
-			const htmlMessages = messages.data.map((message) => {
-				return new Message(message.text).getMessageHtmlString();
-			});
-
-			if(htmlMessages.length < 1) {
-				alert('No messages found!');
-				return false;
+			const messages = response.data;
+			if(messages.length) {
+				messages.forEach(message => {
+					htmlString += new Message(message.text).getMessageHtmlString();
+				});
 			}
-			console.log(messages);
-			return messages;
+			$('#chat-area').append(htmlString);
 		}
 
 		class Message {
@@ -68,7 +66,7 @@ $(document).ready(() => {
         try {
             const response = await client.authenticate();
             if(response) {
-							getMessages();
+							populateMessagesOnAppLoad();
                 // Logout the user if logout button is clicked
                 $('#logout-icon').on('click', async() => {
                     try {
