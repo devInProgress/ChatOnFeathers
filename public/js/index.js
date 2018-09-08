@@ -3,7 +3,7 @@ $(document).ready(() => {
 
     /*
         Feathers boilerplate
-    */
+    */ 
    const socket = io(serverUrl);
 //    initialize our feathers client application through socket.io
    const client = feathers();
@@ -61,50 +61,67 @@ $(document).ready(() => {
 			}
 		 }
 
+		//  start the main operations after the user is autheticated
+		 const main = () => {
+			populateMessagesOnAppLoad();
+			// Logout the user if logout button is clicked
+			$('#logout-icon').on('click', async() => {
+					try {
+							await client.logout();
+							window.location.href = `${serverUrl}/login.html`;
+					}
+					catch(error) {
+							console.error(error.message);
+					}
+			});
+			
+			// save the message to database if user enters one
+			$('#submit-message-form').submit(async(e) => {
+				e.preventDefault();
+				const $msgElement = $('#msg-text');
+				const msg = $msgElement.val();
+				$msgElement.val('');
+				if(msg.trim().length) {
+					try {
+						const response = await messagesService.create({
+							text: msg
+						});
+					}
+					catch(error) {
+						console.log(error.message);
+						alert(error.message);
+					}
+				} else {
+					alert('Enter a Valid message');
+				}
+			});
+
+			// event to check addition of new messages
+			messagesService.on('created', (message) => {
+				const htmlMessage = new Message(message.text);
+				$('#chat-area').append(htmlMessage.getMessageHtmlString());
+				$('html', 'body').animate({scrollTop: $(document).height()}, "slow");
+			});
+		 }
+
+		 const getPayload = async (response) => {
+			 try {
+				 const payload = client.passport.verifyJWT(response.accessToken);
+				 console.log(payload);
+			 }
+			 catch(error) {
+				 console.error(error);
+				 alert(error.message);
+			 }
+		 }
+
  
     const authenticate = async() => {
         try {
             const response = await client.authenticate();
             if(response) {
-							populateMessagesOnAppLoad();
-                // Logout the user if logout button is clicked
-                $('#logout-icon').on('click', async() => {
-                    try {
-                        await client.logout();
-                        window.location.href = `${serverUrl}/login.html`;
-                    }
-                    catch(error) {
-                        console.error(error.message);
-                    }
-								});
-								
-								// save the message to database if user enters one
-								$('#submit-message-form').submit(async(e) => {
-									e.preventDefault();
-									const $msgElement = $('#msg-text');
-									const msg = $msgElement.val();
-									$msgElement.val('');
-									if(msg.trim().length) {
-										try {
-											const response = await messagesService.create({
-												text: msg
-											});
-										}
-										catch(error) {
-											console.log(error.message);
-											alert(error.message);
-										}
-									} else {
-										alert('Enter a Valid message');
-									}
-								});
-
-								// event to check addition of new messages
-								messagesService.on('created', (message) => {
-									const htmlMessage = new Message(message.text);
-									$('#chat-area').append(htmlMessage.getMessageHtmlString());
-									$('html', 'body').animate({scrollTop: $(document).height()}, "slow");
-								});
+							getPayload(response);
+							main();
             }
         }
         catch(error) {
