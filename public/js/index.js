@@ -17,6 +17,26 @@ $(document).ready(() => {
 		const usersService = client.service('/users');
 		const messagesService = client.service('/messages');
 
+		const getMessages = async () => {
+			const messages = await messagesService.find({
+				query: {
+					$sort: {
+						createdAt: -1
+					}
+				}
+			});
+			const htmlMessages = messages.data.map((message) => {
+				return new Message(message.text).getMessageHtmlString();
+			});
+
+			if(htmlMessages.length < 1) {
+				alert('No messages found!');
+				return false;
+			}
+			console.log(messages);
+			return messages;
+		}
+
 		class Message {
 			constructor(message) {
 				this.message = message;
@@ -41,13 +61,14 @@ $(document).ready(() => {
 			</div>
 				`
 			}
- 		}
+		 }
 
+ 
     const authenticate = async() => {
         try {
             const response = await client.authenticate();
             if(response) {
-
+							getMessages();
                 // Logout the user if logout button is clicked
                 $('#logout-icon').on('click', async() => {
                     try {
