@@ -84,7 +84,7 @@ $(document).ready(() => {
 								messagesService.on('created', (message) => {
 									const htmlMessage = new Message(message.text);
 									$('#chat-area').append(htmlMessage.getMessageHtmlString());
-									$('html', 'body').animate({scrollTop: $(document).height()}, 'slow');
+									$('html', 'body').animate({scrollTop: $(document).height()}, "slow");
 								});
             }
         }
